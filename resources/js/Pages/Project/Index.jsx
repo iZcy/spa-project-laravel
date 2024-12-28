@@ -4,6 +4,7 @@ import TextInput from "@/Components/TextInput";
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
+import TableHeading from "@/Components/TableHeading";
 
 export default function Index({ auth, projects, queryParams = null }) {
     queryParams = queryParams || {};
@@ -44,9 +45,17 @@ export default function Index({ auth, projects, queryParams = null }) {
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Projects
-                </h2>
+                <div className="flex justify-between items-center">
+                    <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                        Projects
+                    </h2>
+                    <Link
+                        href={route("project.create")}
+                        className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+                    >
+                        Add New
+                    </Link>
+                </div>
             }
         >
             <Head title="Projects" />
@@ -59,50 +68,72 @@ export default function Index({ auth, projects, queryParams = null }) {
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50  dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
-                                            <th className="p-3">ID</th>
-                                            <th className="p-3">Image</th>
-                                            <th
-                                                onClick={(e) =>
-                                                    sortChanged("name")
-                                                }
-                                                className="p-3"
-                                            >
-                                                Name
-                                            </th>
-                                            <th
-                                                onClick={(e) =>
-                                                    sortChanged("status")
-                                                }
-                                                className="p-3"
-                                            >
-                                                Status
-                                            </th>
-                                            <th
-                                                onClick={(e) =>
-                                                    sortChanged("created_at")
-                                                }
-                                                className="p-3"
-                                            >
-                                                Create Date
-                                            </th>
-                                            <th
-                                                onClick={(e) =>
-                                                    sortChanged("updated_at")
-                                                }
-                                                className="p-3"
-                                            >
-                                                Update Date
-                                            </th>
-                                            <th
-                                                onClick={(e) =>
-                                                    sortChanged("due_date")
-                                                }
-                                                className="p-3"
-                                            >
-                                                Due Date
-                                            </th>
-                                            <th className="p-3">Created By</th>
-                                            <th className="p-3">Actions</th>
+                                            {[
+                                                {
+                                                    name: "id",
+                                                    sortable: true,
+                                                    text: "ID",
+                                                },
+                                                {
+                                                    name: "image",
+                                                    sortable: false,
+                                                    text: "Image",
+                                                },
+                                                {
+                                                    name: "name",
+                                                    sortable: true,
+                                                    text: "Name",
+                                                },
+                                                {
+                                                    name: "status",
+                                                    sortable: true,
+                                                    text: "Status",
+                                                },
+                                                {
+                                                    name: "created_at",
+                                                    sortable: true,
+                                                    text: "Create Date",
+                                                },
+                                                {
+                                                    name: "updated_at",
+                                                    sortable: true,
+                                                    text: "Update Date",
+                                                },
+                                                {
+                                                    name: "due_date",
+                                                    sortable: true,
+                                                    text: "Due Date",
+                                                },
+                                                {
+                                                    name: "created_by",
+                                                    sortable: false,
+                                                    text: "Created By",
+                                                },
+                                                {
+                                                    name: "actions",
+                                                    sortable: false,
+                                                    text: "Actions",
+                                                },
+                                            ].map((item) => {
+                                                return (
+                                                    <TableHeading
+                                                        key={item.name}
+                                                        name={item.name}
+                                                        sortable={item.sortable}
+                                                        sort_direction={
+                                                            queryParams.sort_direction
+                                                        }
+                                                        sort_field={
+                                                            queryParams.sort_field
+                                                        }
+                                                        sortChanged={
+                                                            sortChanged
+                                                        }
+                                                    >
+                                                        {item.text}
+                                                    </TableHeading>
+                                                );
+                                            })}
                                         </tr>
                                     </thead>
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50  dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
@@ -180,8 +211,16 @@ export default function Index({ auth, projects, queryParams = null }) {
                                                             alt=""
                                                         />
                                                     </td>
-                                                    <td className="p-3">
-                                                        {project.name}
+                                                    <td className="p-3 text-gray-100 text-nowrap">
+                                                        <Link
+                                                            href={route(
+                                                                "project.show",
+                                                                project.id
+                                                            )}
+                                                            className="hover:underline"
+                                                        >
+                                                            {project.name}
+                                                        </Link>
                                                     </td>
                                                     <td className="p-3">
                                                         <span
