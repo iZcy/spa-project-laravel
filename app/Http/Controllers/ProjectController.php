@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
 use App\Models\Project;
 use Illuminate\Support\Str;
 use App\Http\Resources\TaskResource;

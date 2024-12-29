@@ -102,6 +102,13 @@ export default function TasksTable({
         columns.splice(2, 0, newCol);
     }
 
+    const deleteProject = (id) => {
+        if (!window.confirm("Are you sure you want to delete this task?"))
+            return;
+
+        router.delete(route("task.destroy", id));
+    };
+
     return (
         <>
             <div className="overflow-auto">
@@ -194,7 +201,7 @@ export default function TasksTable({
                                     >
                                         <Link
                                             href={route(
-                                                "project.show",
+                                                "task.show",
                                                 task.project.id
                                             )}
                                             className="hover:underline"
@@ -227,22 +234,21 @@ export default function TasksTable({
                                     <td className="p-3">
                                         {task.createdBy.name}
                                     </td>
-                                    <td>
+                                    <td className="p-3 text-nowrap">
                                         <Link
                                             href={route("task.edit", task.id)}
                                             className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
                                         >
                                             Edit
                                         </Link>
-                                        <Link
-                                            href={route(
-                                                "task.destroy",
-                                                task.id
-                                            )}
+                                        <button
+                                            onClick={() =>
+                                                deleteProject(task.id)
+                                            }
                                             className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
                                         >
                                             Delete
-                                        </Link>
+                                        </button>
                                     </td>
                                 </tr>
                             );
